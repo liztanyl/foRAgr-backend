@@ -1,6 +1,6 @@
-export default function initFridgeItemModel(sequelize, DataTypes) {
+export default function initShelfLifeItemModel(sequelize, DataTypes) {
 	return sequelize.define(
-		"fridge_item",
+		"shelf_life_item",
 		{
 			id: {
 				allowNull: false,
@@ -8,37 +8,33 @@ export default function initFridgeItemModel(sequelize, DataTypes) {
 				primaryKey: true,
 				type: DataTypes.INTEGER,
 			},
-			userId: {
+			foodItemId: {
 				allowNull: false,
 				type: DataTypes.INTEGER,
 				references: {
-					model: "users",
-					key: "id",
-				},
+					model: "food_items",
+					key: "id"
+				}
 			},
-			shelfLifeItemId: {
+			categoryId: {
 				allowNull: false,
 				type: DataTypes.INTEGER,
 				references: {
-					model: "self_life_items",
-					key: "id",
-				},
+					model: "categories",
+					key: "id"
+				}
 			},
-			addedOn: {
+			storageId: {
 				allowNull: false,
-				type: DataTypes.DATE,
+				type: DataTypes.INTEGER,
+				references: {
+					model: "storage",
+					key: "id"
+				}
 			},
-			expiry: {
+			shelfLifeDays: {
 				allowNull: false,
-				type: DataTypes.DATE,
-			},
-			price: {
-				allowNull: true,
-				type: DataTypes.DECIMAL(10, 2),
-			},
-			notes: {
-				allowNull: false,
-				type: DataTypes.TEXT,
+				type: DataTypes.INTEGER,
 			},
 			createdAt: {
 				allowNull: false,
@@ -50,7 +46,7 @@ export default function initFridgeItemModel(sequelize, DataTypes) {
 			},
 		},
 		{
-			tableName: "fridge_items",
+			tableName: "shelf_life_items",
 			underscored: true,
 		}
 	);

@@ -36,6 +36,27 @@ module.exports = {
 			},
 		});
 
+		await queryInterface.createTable("food_items", {
+			id: {
+				allowNull: false,
+				autoIncrement: true,
+				primaryKey: true,
+				type: Sequelize.INTEGER,
+			},
+			name: {
+				allowNull: false,
+				type: Sequelize.STRING,
+			},
+			created_at: {
+				allowNull: false,
+				type: Sequelize.DATE,
+			},
+			updated_at: {
+				allowNull: false,
+				type: Sequelize.DATE,
+			},
+		});
+
 		await queryInterface.createTable("categories", {
 			id: {
 				allowNull: false,
@@ -57,39 +78,61 @@ module.exports = {
 			},
 		});
 
-		await queryInterface.createTable("food_items", {
+		await queryInterface.createTable("storage", {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			category_id: {
-				type: Sequelize.INTEGER,
-				references: {
-					model: "categories",
-					key: "id",
-				},
-			},
 			name: {
 				allowNull: false,
 				type: Sequelize.STRING,
 			},
+			created_at: {
+				allowNull: false,
+				type: Sequelize.DATE,
+			},
+			updated_at: {
+				allowNull: false,
+				type: Sequelize.DATE,
+			},
+		});
+
+		await queryInterface.createTable("shelf_life_items", {
+			id: {
+				allowNull: false,
+				autoIncrement: true,
+				primaryKey: true,
+				type: Sequelize.INTEGER,
+			},
+			food_item_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: {
+					model: "food_items",
+					key: "id"
+				}
+			},
+			category_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: {
+					model: "categories",
+					key: "id"
+				}
+			},
+			storage_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: {
+					model: "storage",
+					key: "id"
+				}
+			},
 			shelf_life_days: {
 				allowNull: false,
 				type: Sequelize.INTEGER,
-			},
-			freezer: {
-				allowNull: false,
-				type: Sequelize.BOOLEAN,
-			},
-			fridge: {
-				allowNull: false,
-				type: Sequelize.BOOLEAN,
-			},
-			pantry: {
-				allowNull: false,
-				type: Sequelize.BOOLEAN,
 			},
 			created_at: {
 				allowNull: false,
@@ -109,16 +152,18 @@ module.exports = {
 				type: Sequelize.INTEGER,
 			},
 			user_id: {
+				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: {
 					model: "users",
 					key: "id",
 				},
 			},
-			food_item_id: {
+			shelf_life_item_id: {
+				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: {
-					model: "food_items",
+					model: "self_life_items",
 					key: "id",
 				},
 			},
@@ -151,8 +196,10 @@ module.exports = {
 
 	async down(queryInterface) {
 		await queryInterface.dropTable("fridge_items");
+		await queryInterface.dropTable("shelf_life_items");
 		await queryInterface.dropTable("food_items");
 		await queryInterface.dropTable("categories");
+		await queryInterface.dropTable("storage");
 		await queryInterface.dropTable("users");
 	},
 };
