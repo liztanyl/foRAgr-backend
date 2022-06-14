@@ -1,6 +1,7 @@
 import express from "express";
+import cors from "cors";
+import methodOverride from "method-override";
 import cookieParser from "cookie-parser";
-
 import bindRoutes from "./routes.mjs";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
@@ -12,7 +13,6 @@ app.use(
 		origin: FRONTEND_URL,
 	})
 );
-app.set("view engine", "ejs");
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
