@@ -36,10 +36,9 @@ db.User.hasMany(db.FridgeItem);
 db.FridgeItem.belongsTo(db.ShelfLifeItem);
 db.ShelfLifeItem.hasMany(db.FridgeItem);
 
-db.ShelfLifeItem.belongsTo(db.Category);
-db.Category.hasMany(db.ShelfLifeItem);
-
-db.FoodItem.belongsToMany(db.Storage, { through: 'shelf_life_items' })
-db.Storage.belongsToMany(db.FoodItem, { through: 'shelf_life_items' })
+db.FoodItem.belongsToMany(db.Storage, { through: db.ShelfLifeItem });
+db.Storage.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
+db.FoodItem.belongsToMany(db.Category, { through: db.ShelfLifeItem });
+db.Category.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
 
 export default db;
