@@ -40,5 +40,7 @@ db.FoodItem.belongsToMany(db.Storage, { through: db.ShelfLifeItem });
 db.Storage.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
 db.FoodItem.belongsToMany(db.Category, { through: db.ShelfLifeItem });
 db.Category.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
+db.Category.belongsToMany(db.Storage, { through: db.ShelfLifeItem });
+db.Storage.belongsToMany(db.Category, { through: db.ShelfLifeItem });
 
 export default db;

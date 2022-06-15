@@ -163,7 +163,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: {
-					model: "self_life_items",
+					model: "shelf_life_items",
 					key: "id",
 				},
 			},

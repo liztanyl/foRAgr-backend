@@ -20,7 +20,7 @@ export default function initFridgeItemModel(sequelize, DataTypes) {
 				allowNull: false,
 				type: DataTypes.INTEGER,
 				references: {
-					model: "self_life_items",
+					model: "shelf_life_items",
 					key: "id",
 				},
 			},
