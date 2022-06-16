@@ -23,6 +23,16 @@ module.exports = {
 			item.updated_at = new Date();
 		});
 
+		await queryInterface.bulkInsert('users', [
+			{
+				id: 1,
+				email: 'a@a.com',
+				password: 'a',
+				name: 'User A',
+				created_at: new Date(),
+				updated_at: new Date(),
+			},
+		]);
 		await queryInterface.bulkInsert('food_items', food_items);
 		await queryInterface.bulkInsert('categories', categories);
 		await queryInterface.bulkInsert('storage', storage);
@@ -34,5 +44,6 @@ module.exports = {
 		await queryInterface.bulkDelete('food_items', null, {});
 		await queryInterface.bulkDelete('categories', null, {});
 		await queryInterface.bulkDelete('storage', null, {});
+		await queryInterface.bulkDelete('users', null, {});
 	},
 };
