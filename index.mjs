@@ -8,10 +8,10 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:19006';
 
 const app = express();
 app.use(
-	cors({
-		credentials: true,
-		origin: FRONTEND_URL,
-	})
+  cors({
+    credentials: true,
+    origin: FRONTEND_URL,
+  })
 );
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
