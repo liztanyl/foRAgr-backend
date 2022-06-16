@@ -1,10 +1,10 @@
-import express from "express";
-import cors from "cors";
-import methodOverride from "method-override";
-import cookieParser from "cookie-parser";
-import bindRoutes from "./routes.mjs";
+import express from 'express';
+import cors from 'cors';
+import methodOverride from 'method-override';
+import cookieParser from 'cookie-parser';
+import bindRoutes from './routes.mjs';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:19006';
 
 const app = express();
 app.use(
@@ -15,8 +15,8 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(methodOverride("_method"));
-app.use(express.static("public"));
+app.use(methodOverride('_method'));
+app.use(express.static('public'));
 app.use(express.json());
 
 bindRoutes(app);
