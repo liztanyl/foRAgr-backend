@@ -1,5 +1,9 @@
 import db from './models/index.mjs';
+import initFoodItemsController from './controllers/foodItems.mjs';
+
 export default function bindRoutes(app) {
+	const FoodItemsController = initFoodItemsController(db);
+
 	app.get('/', (request, response) => {
 		response.sendFile(resolve('dist', 'main.html'));
 	});
@@ -27,4 +31,6 @@ export default function bindRoutes(app) {
 			res.status(404).send('Something went wrong');
 		}
 	});
+
+	app.get('/foodItems/index', FoodItemsController.index);
 }
