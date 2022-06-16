@@ -1,5 +1,23 @@
 import { Sequelize } from 'sequelize';
 
+const formatFoodItem = (foodItem) => {
+	const shelfLifeItems = foodItem.shelf_life_items.map((item) => {
+		return {
+			categoryId: item.categoryId,
+			categoryName: item.category.name,
+			shelfLifeDays: item.shelfLifeDays,
+			storageId: item.storageId,
+			storageName: item.storage.name,
+		};
+	});
+
+	return {
+		id: foodItem.id,
+		name: foodItem.name,
+		shelfLifeItems: shelfLifeItems,
+	};
+};
+
 export default function initFoodItemsController(db) {
 	const index = async (request, response) => {
 		try {
@@ -21,8 +39,19 @@ export default function initFoodItemsController(db) {
 				where: {
 					id: reviewItemIds,
 				},
+				include: [
+					{
+						model: db.ShelfLifeItem,
+						include: [db.Category, db.Storage],
+					},
+				],
 			});
-			response.send(foodItems);
+
+			const dataToClient = foodItems.map((foodItem) => {
+				return formatFoodItem(foodItem);
+			});
+
+			response.send(dataToClient);
 		} catch (error) {
 			console.log(error);
 			response.status(500).send();
