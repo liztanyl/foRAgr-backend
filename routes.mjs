@@ -1,6 +1,5 @@
 import db from './models/index.mjs';
 import initFoodItemsController from './controllers/foodItems.mjs';
-
 export default function bindRoutes(app) {
 	const FoodItemsController = initFoodItemsController(db);
 
@@ -25,6 +24,7 @@ export default function bindRoutes(app) {
 	app.get('/shelfLifeItems', async (req, res) => {
 		try {
 			const items = await db.ShelfLifeItem.findAll();
+			console.log(items);
 			res.send(items);
 		} catch (error) {
 			console.log(error);
@@ -33,4 +33,5 @@ export default function bindRoutes(app) {
 	});
 
 	app.get('/foodItems/index', FoodItemsController.index);
+	app.get('/reviewItems/:reviewItemIds', FoodItemsController.reviewItems);
 }
