@@ -1,0 +1,17 @@
+module.exports = [
+	{ id: 1, name: 'Dairy / Eggs' },
+	{ id: 2, name: 'Bakery / Baking Needs' },
+	{ id: 3, name: 'Beverages' },
+	{ id: 4, name: 'Breakfast' },
+	{ id: 5, name: 'Canned Food' },
+	{ id: 6, name: 'Breakfast' },
+	{ id: 7, name: 'Fruits & Vegetables' },
+	{ id: 8, name: 'Meat' },
+	{ id: 9, name: 'Seafood' },
+	{ id: 10, name: 'Snacks' },
+	{ id: 11, name: 'Rice / Noodles / Pasta' },
+	{ id: 12, name: 'Oil / Cooking Paste & Sauces' },
+	{ id: 13, name: 'Condiments & Seasonings' },
+	{ id: 14, name: 'Soups' },
+	{ id: 15, name: 'Dried / Preserved Food' },
+];

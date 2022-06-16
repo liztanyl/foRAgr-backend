@@ -1,14 +1,14 @@
-import { Sequelize } from "sequelize";
-import allConfig from "../config/config.js";
+import { Sequelize } from 'sequelize';
+import allConfig from '../config/config.js';
 
-import initUserModel from "./user.mjs";
-import initCategoryModel from "./category.mjs";
-import initFoodItemModel from "./foodItem.mjs";
-import initFridgeItemModel from "./fridgeItem.mjs";
-import initShelfLifeItemModel from "./shelfLifeItem.mjs";
-import initStorageModel from "./storage.mjs";
+import initUserModel from './user.mjs';
+import initCategoryModel from './category.mjs';
+import initFoodItemModel from './foodItem.mjs';
+import initFridgeItemModel from './fridgeItem.mjs';
+import initShelfLifeItemModel from './shelfLifeItem.mjs';
+import initStorageModel from './storage.mjs';
 
-const env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || 'development';
 
 const config = allConfig[env];
 const db = {};
@@ -36,11 +36,19 @@ db.User.hasMany(db.FridgeItem);
 db.FridgeItem.belongsTo(db.ShelfLifeItem);
 db.ShelfLifeItem.hasMany(db.FridgeItem);
 
+db.FoodItem.hasMany(db.ShelfLifeItem);
+db.ShelfLifeItem.belongsTo(db.FoodItem);
 db.FoodItem.belongsToMany(db.Storage, { through: db.ShelfLifeItem });
-db.Storage.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
 db.FoodItem.belongsToMany(db.Category, { through: db.ShelfLifeItem });
+
+db.Category.hasMany(db.ShelfLifeItem);
+db.ShelfLifeItem.belongsTo(db.Category);
 db.Category.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
 db.Category.belongsToMany(db.Storage, { through: db.ShelfLifeItem });
+
+db.Storage.hasMany(db.ShelfLifeItem);
+db.ShelfLifeItem.belongsTo(db.Storage);
+db.Storage.belongsToMany(db.FoodItem, { through: db.ShelfLifeItem });
 db.Storage.belongsToMany(db.Category, { through: db.ShelfLifeItem });
 
 export default db;
