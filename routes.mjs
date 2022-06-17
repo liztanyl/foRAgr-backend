@@ -2,7 +2,7 @@ import db from './models/index.mjs';
 import initFoodItemsController from './controllers/foodItems.mjs';
 export default function bindRoutes(app) {
   const FoodItemsController = initFoodItemsController(db);
-
+  
   app.get('/', (request, response) => {
     response.sendFile(resolve('dist', 'main.html'));
   });
@@ -34,8 +34,8 @@ export default function bindRoutes(app) {
 
   app.get('/foodItems/index', FoodItemsController.index);
   app.get('/reviewItems/:reviewItemIds', FoodItemsController.reviewItems);
-}
-app.post('/photoData', async (req, res) => {
+
+  app.post('/photoData', async (req, res) => {
   try {
     console.log(req.body);
   } catch (error) {
@@ -43,3 +43,5 @@ app.post('/photoData', async (req, res) => {
     res.status(404).send('Something went wrong');
   }
 });
+ 
+}
