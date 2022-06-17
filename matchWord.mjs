@@ -10,8 +10,7 @@ import ingredientsList from './ingredientsData/foodItemsDatam.mjs';
 
 nlp.plugin(datePlugin);
 
-const foundData = [];
-
+// to process input
 const processInput = (inputTerms) => {
   const originalTerm = inputTerms;
   const newTerm = originalTerm.replace(/\//g, ' ');
@@ -20,9 +19,9 @@ const processInput = (inputTerms) => {
   const doc = nlp(removedNumbersAttached);
   const regex = /(?:\d.\d{1,3}\s?(x|X)\s?\d.\d{1,3})/g;
   if (
-    inputTerms.match(/(S\(\d{6}\))/g) ||
-    inputTerms.match(regex) !== null ||
-    receiptKeyWords.some((word) => inputTerms.includes(word))
+    inputTerms.match(/(S\(\d{6}\))/g)
+    || inputTerms.match(regex) !== null
+    || receiptKeyWords.some((word) => inputTerms.includes(word))
   ) {
     return '';
   }
@@ -38,12 +37,8 @@ const processInput = (inputTerms) => {
     processed: doc.text(),
   };
 };
-//takes in possible matches(objects)
-const setOcrTest = (foundNames) => {
-  [...foundData, ...foundNames];
-  console.log(foundNames);
-};
 
+// to match detected input
 const matchChecker = (detectedInput, originalName) => {
   const ingredientsListSplit = ingredientsList.map((item) => ({
     keyWords: item.split(' '),
@@ -52,120 +47,110 @@ const matchChecker = (detectedInput, originalName) => {
   const splitInput = detectedInput.split(' ');
 
   if (detectedInput.length !== 0) {
-    // confirmed matches
+    // first match to get exact name
     const checkExactMatch = matchSorter(ingredientsListSplit, detectedInput, {
       keys: ['itemName'],
     });
 
     if (checkExactMatch.length > 0) {
-      setOcrTest([
-        {
-          parsedName: originalName,
-          word: detectedInput,
-          match: checkExactMatch.flat(),
-        },
-      ]);
-    } else {
-      // unsure matches
-      const likelyMatches = [];
-      ingredientsListSplit.forEach((ingredient) => {
-        ingredient.keyWords.forEach((word) => {
-          if (
-            fuzzysearch(detectedInput, word) ||
-            fuzzysearch(word, detectedInput)
-          ) {
-            const similarityValue = distance(
-              detectedInput,
-              ingredient.itemName
+      return {
+        parsedName: originalName,
+        word: detectedInput,
+        match: checkExactMatch.flat(),
+      };
+    }
+    // unsure matches
+    const likelyMatches = [];
+    ingredientsListSplit.forEach((ingredient) => {
+      ingredient.keyWords.forEach((word) => {
+        if (
+          fuzzysearch(detectedInput, word) || fuzzysearch(word, detectedInput)
+        ) {
+          const similarityValue = distance(detectedInput, ingredient.itemName);
+          if (stringSimilarity.compareTwoStrings(ingredient.itemName, detectedInput) > 0.45) {
+            likelyMatches.push({ ...ingredient, value: similarityValue });
+            const found = likelyMatches.some(
+              (match) => match.itemName === ingredient.itemName,
             );
+            if (!found) {
+              likelyMatches.push({ ...ingredient, value: similarityValue });
+            }
+          }
+        }
+      });
+    });
+    likelyMatches.sort((a, b) => a.value - b.value);
 
+    if (likelyMatches.length > 0) {
+      return {
+        parsedName: originalName,
+        word: detectedInput,
+        match: likelyMatches,
+      };
+    }
+    // unsure matches
+    const possibleMatches = [];
+
+    for (let i = 0; i < ingredientsListSplit.length; i += 1) {
+      ingredientsListSplit[i].keyWords.forEach((word) => {
+        splitInput.forEach((inputWord) => {
+          if (
+            fuzzysearch(inputWord, word) || fuzzysearch(word, inputWord)
+          ) {
+            const currentIngredient = ingredientsListSplit[i];
             if (
               stringSimilarity.compareTwoStrings(
-                ingredient.itemName,
-                detectedInput
+                currentIngredient.itemName,
+                detectedInput,
               ) > 0.45
             ) {
-              likelyMatches.push({ ...ingredient, value: similarityValue });
-              const found = likelyMatches.some(
-                (match) => match.itemName === ingredient.itemName
+              const similarityValue = distance(
+                detectedInput,
+                ingredientsListSplit[i].itemName,
+              );
+              const found = possibleMatches.some(
+                (match) => match.itemName === currentIngredient.itemName,
               );
               if (!found) {
-                likelyMatches.push({ ...ingredient, value: similarityValue });
+                possibleMatches.push({
+                  ...currentIngredient,
+                  value: similarityValue,
+                });
               }
             }
           }
         });
       });
-      likelyMatches.sort((a, b) => a.value - b.value);
-
-      if (likelyMatches.length > 0) {
-        setOcrTest([
-          {
-            parsedName: originalName,
-            word: detectedInput,
-            match: likelyMatches,
-          },
-        ]);
-      } else {
-        // unsure matches
-        const possibleMatches = [];
-
-        for (let i = 0; i < ingredientsListSplit.length; i += 1) {
-          ingredientsListSplit[i].keyWords.forEach((word) => {
-            splitInput.forEach((inputWord) => {
-              if (
-                fuzzysearch(inputWord, word) ||
-                fuzzysearch(word, inputWord)
-              ) {
-                const currentIngredient = ingredientsListSplit[i];
-                if (
-                  stringSimilarity.compareTwoStrings(
-                    currentIngredient.itemName,
-                    detectedInput
-                  ) > 0.45
-                ) {
-                  const similarityValue = distance(
-                    detectedInput,
-                    ingredientsListSplit[i].itemName
-                  );
-                  const found = possibleMatches.some(
-                    (match) => match.itemName === currentIngredient.itemName
-                  );
-                  if (!found) {
-                    possibleMatches.push({
-                      ...currentIngredient,
-                      value: similarityValue,
-                    });
-                  }
-                }
-              }
-            });
-          });
-        }
-        possibleMatches.sort((a, b) => a.value - b.value);
-        setOcrTest([
-          {
-            parsedName: originalName,
-            word: detectedInput,
-            match: possibleMatches,
-          },
-        ]);
-      }
     }
+    possibleMatches.sort((a, b) => a.value - b.value);
+    return {
+      parsedName: originalName,
+      word: detectedInput,
+      match: possibleMatches,
+    };
   }
 };
 
-//sample data
+// sample data --> can be edited to add in result that is parsed
 const ocr = ocrResponse4[0].description.split('\n');
 
 const getMatches = () => {
+  const foundData = [];
   ocr.forEach((lineItem) => {
     const { original, processed } = processInput(lineItem.toLowerCase());
     if (processed !== undefined) {
-      matchChecker(processed, original);
-      return foundData;
+      const matchedResult = matchChecker(processed, original);
+      // const finalParsedResult = matchedResult.filter((result) => result.match.length !== 0);
+      // console.log(finalParsedResult);
+      if (matchedResult !== undefined && matchedResult.match.length !== 0) {
+        foundData.push(matchedResult);
+      }
     }
   });
+  return foundData;
 };
 
-console.log(getMatches(), 'DATAAAAAA');
+// when called this function, getMatches, will return an array of results with matches
+console.log(getMatches());
+
+export default getMatches;
