@@ -1,3 +1,4 @@
+import db from './models/index.mjs';
 import initFoodItemsController from './controllers/foodItems.mjs';
 import initPhotoDataController from './controllers/photoData.mjs';
 
