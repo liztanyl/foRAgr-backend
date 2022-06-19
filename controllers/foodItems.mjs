@@ -1,26 +1,3 @@
-const allSameCategory = (shelfLifeItems) => {
-  let areAllSameCategory = true;
-  const firstCategoryName = shelfLifeItems[0].categoryName;
-  shelfLifeItems.forEach((item) => {
-    if (firstCategoryName != item.categoryName) {
-      areAllSameCategory = false;
-    }
-  });
-  return areAllSameCategory;
-};
-
-const formatShelfLifeItems = (shelfLifeItems) => {
-  const categoryNameTracker = {};
-  shelfLifeItems.forEach((item) => {
-    if (item.categoryName in categoryNameTracker) {
-      categoryNameTracker[item.categoryName].push(item);
-    } else {
-      categoryNameTracker[item.categoryName] = [item];
-    }
-    return categoryNameTracker;
-  });
-};
-
 const formatFoodItem = (foodItem) => {
   // filter data
   const shelfLifeItems = foodItem.shelf_life_items.map((item) => ({
@@ -53,6 +30,11 @@ const formatFoodItem = (foodItem) => {
     id: foodItem.id,
     name: foodItem.name,
     categories,
+    category: '',
+    storageMethod: '',
+    shelfLifeDays: '',
+    purchaseDate: '',
+    expiryDate: '',
   };
 };
 
