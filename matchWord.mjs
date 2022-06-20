@@ -5,7 +5,7 @@ import nlp from 'compromise';
 import datePlugin from 'compromise-dates';
 import { matchSorter } from 'match-sorter';
 import receiptKeyWords from './ingredientsData/blacklistedWords.mjs';
-import ocrResponse4 from './ingredientsData/sampleData/testOCR4.mjs';
+// import ocrResponse4 from './ingredientsData/sampleData/testOCR4.mjs';
 import ingredientsList from './ingredientsData/foodItemsDatam.mjs';
 
 nlp.plugin(datePlugin);
@@ -39,6 +39,7 @@ const processInput = (inputTerms) => {
 };
 
 // to match detected input
+// eslint-disable-next-line consistent-return
 const matchChecker = (detectedInput, originalName) => {
   const ingredientsListSplit = ingredientsList.map((item) => ({
     keyWords: item.split(' '),
@@ -132,9 +133,10 @@ const matchChecker = (detectedInput, originalName) => {
 };
 
 // sample data --> can be edited to add in result that is parsed
-const ocr = ocrResponse4[0].description.split('\n');
+// const ocr = ocrResponse4[0].description.split('\n');
 
-const getMatches = () => {
+const getMatches = (detection) => {
+  const ocr = detection.description.split('\n');
   const foundData = [];
   ocr.forEach((lineItem) => {
     const { original, processed } = processInput(lineItem.toLowerCase());
@@ -151,6 +153,6 @@ const getMatches = () => {
 };
 
 // when called this function, getMatches, will return an array of results with matches
-console.log(getMatches());
+// console.log(getMatches());
 
 export default getMatches;

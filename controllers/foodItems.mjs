@@ -19,12 +19,10 @@ const formatFoodItem = (foodItem) => {
   });
 
   // manipulate categoryNameTracker to reformat object
-  const categories = Object.keys(categoryNameTracker).map((category) => {
-    return {
-      categoryName: category,
-      storageMethods: categoryNameTracker[category],
-    };
-  });
+  const categories = Object.keys(categoryNameTracker).map((category) => ({
+    categoryName: category,
+    storageMethods: categoryNameTracker[category],
+  }));
 
   return {
     id: foodItem.id,
@@ -68,9 +66,7 @@ export default function initFoodItemsController(db) {
         ],
       });
 
-      const dataToClient = foodItems.map((foodItem) =>
-        formatFoodItem(foodItem)
-      );
+      const dataToClient = foodItems.map((foodItem) => formatFoodItem(foodItem));
 
       response.send(dataToClient);
     } catch (error) {
