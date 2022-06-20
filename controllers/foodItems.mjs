@@ -35,6 +35,7 @@ const formatFoodItem = (foodItem) => {
     shelfLifeDays: '',
     purchaseDate: '',
     expiryDate: '',
+    notes: '',
   };
 };
 
