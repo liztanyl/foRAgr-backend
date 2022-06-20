@@ -4,9 +4,8 @@ export default function initPhotoDataController(db) {
   const addPhotoData = async (request, response) => {
     try {
       // send image uri
-      const imageUri = request.body.imageData;
-      console.log(imageUri);
-      const matchedData = getMatches();
+      const { detection } = request.body;
+      const matchedData = getMatches(detection);
       console.log(matchedData);
 
       const foodItems = await db.FoodItem.findAll({
