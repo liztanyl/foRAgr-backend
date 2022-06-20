@@ -3,8 +3,6 @@ export default function initFridgeItemsController(db) {
     try {
       console.log(request.body);
 
-      const addedItems = await db.FridgeItem.create();
-
       response.send('success');
     } catch (err) {
       console.log(err);
@@ -13,10 +11,15 @@ export default function initFridgeItemsController(db) {
 
   const addItems = async (request, response) => {
     try {
-      console.log(request.body);
-      response.send('success');
+      const items = request.body;
+      const addedItems = await db.FridgeItem.bulkCreate(items);
+
+      if (addedItems) {
+        response.send('success');
+      }
     } catch (err) {
       console.log(err);
+      response.send('Something went wrong');
     }
   };
   return { index, addItems };
