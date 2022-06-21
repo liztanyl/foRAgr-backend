@@ -5,7 +5,6 @@ import nlp from 'compromise';
 import datePlugin from 'compromise-dates';
 import { matchSorter } from 'match-sorter';
 import receiptKeyWords from './ingredientsData/blacklistedWords.mjs';
-// import ocrResponse4 from './ingredientsData/sampleData/testOCR4.mjs';
 import ingredientsList from './ingredientsData/foodItemsDatam.mjs';
 
 nlp.plugin(datePlugin);
