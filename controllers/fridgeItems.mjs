@@ -18,26 +18,16 @@ const formatFridgeItem = (item) => {
 export default function initFridgeItemsController(db) {
   const index = async (request, response) => {
     try {
-      console.log(request.body);
-      const fridgeItems = await db.FridgeItem.findAll(
-        {
-          where: { userId: 1 },
-          include: {
-            model: db.ShelfLifeItem,
-            attributes: ['id', 'foodItemId', 'categoryId', 'storageId', 'shelfLifeDays'],
-            include: [{
-              model: db.FoodItem,
-              attributes: ['id', 'name'],
-            }, {
-              model: db.Category,
-              attributes: ['id', 'name'],
-            }, {
-              model: db.Storage,
-              attributes: ['id', 'name'],
-            }],
-          },
+      const fridgeItems = await db.FridgeItem.findAll({
+        where: { userId: 1 },
+        include: {
+          model: db.ShelfLifeItem,
+          attributes: ['id', 'foodItemId', 'categoryId', 'storageId', 'shelfLifeDays'],
+          include: [{ model: db.FoodItem, attributes: ['id', 'name'] },
+            { model: db.Category, attributes: ['id', 'name'] },
+            { model: db.Storage, attributes: ['id', 'name'] }],
         },
-      );
+      });
 
       const dataToClient = fridgeItems.map((item) => formatFridgeItem(item));
       response.send(dataToClient);
@@ -47,41 +37,30 @@ export default function initFridgeItemsController(db) {
     }
   };
 
-  const addItems = async (request, response) => {
+  const add = async (request, response) => {
     try {
       const items = request.body;
-      console.log(items);
+
       const addedItems = await db.FridgeItem.bulkCreate(
         items,
-        { fields: ['userId', 'shelfLifeItemId', 'addedOn', 'expiry', 'notes'] },
-      );
-      console.log(addedItems);
-      const addedItemsIds = addedItems.map((item) => item.id);
-      console.log(addedItemsIds);
-
-      const addedItemsDetails = await db.FridgeItem.findAll(
         {
-          where: {
-            id: addedItemsIds,
-          },
-          include: {
-            model: db.ShelfLifeItem,
-            attributes: ['id', 'foodItemId', 'categoryId', 'storageId', 'shelfLifeDays'],
-            include: [{
-              model: db.FoodItem,
-              attributes: ['id', 'name'],
-            }, {
-              model: db.Category,
-              attributes: ['id', 'name'],
-            }, {
-              model: db.Storage,
-              attributes: ['id', 'name'],
-            }],
-          },
+          fields:
+          ['userId', 'shelfLifeItemId', 'addedOn', 'expiry', 'notes'],
         },
       );
 
-      addedItemsDetails.forEach((item) => console.log(item));
+      const addedItemsIds = addedItems.map((item) => item.id);
+      const addedItemsDetails = await db.FridgeItem.findAll({
+        where: { id: addedItemsIds },
+        include: {
+          model: db.ShelfLifeItem,
+          attributes: ['id', 'foodItemId', 'categoryId', 'storageId', 'shelfLifeDays'],
+          include: [{ model: db.FoodItem, attributes: ['id', 'name'] },
+            { model: db.Category, attributes: ['id', 'name'] },
+            { model: db.Storage, attributes: ['id', 'name'] }],
+        },
+      });
+
       const dataToClient = addedItemsDetails.map((item) => formatFridgeItem(item));
       response.send(dataToClient);
     } catch (err) {
@@ -90,5 +69,16 @@ export default function initFridgeItemsController(db) {
     }
   };
 
-  return { index, addItems };
+  const destroy = async (request, response) => {
+    try {
+      const { itemId } = request.params;
+      await db.FridgeItem.destroy({ where: { id: itemId } });
+      response.send('success');
+    } catch (err) {
+      console.log(err.message);
+      response.send('Something went wrong');
+    }
+  };
+
+  return { index, add, destroy };
 }
