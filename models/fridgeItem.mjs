@@ -40,6 +40,10 @@ export default function initFridgeItemModel(sequelize, DataTypes) {
         allowNull: false,
         type: DataTypes.TEXT,
       },
+      notificationIdentifier: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
