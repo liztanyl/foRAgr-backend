@@ -14,10 +14,10 @@ const config = allConfig[env];
 const db = {};
 
 const sequelize = new Sequelize(
-	config.database,
-	config.usename,
-	config.password,
-	config
+  config.database,
+  config.username,
+  config.password,
+  config
 );
 
 db.sequelize = sequelize;
