@@ -1,33 +1,38 @@
 {
-	"scripts": {
-		"start": "nodemon index.mjs",
-		"migrate": "npx sequelize db:migrate",
-		"undo migrate": "npx sequelize db:migrate:undo",
-		"redo migrate": "npx sequelize db:migrate:undo && npx sequelize db:migrate",
-		"seed": "npx sequelize db:seed:all",
-		"redo seed": "npx sequelize db:migrate:undo && npx sequelize db:migrate && npx sequelize db:seed:all"
-	},
-	"dependencies": {
-		"compromise": "^14.3.1",
-		"compromise-dates": "^3.4.0",
-		"cookie-parser": "^1.4.6",
-		"cors": "^2.8.5",
-		"express": "^4.18.1",
-		"fastest-levenshtein": "^1.0.12",
-		"fuzzysearch": "^1.0.3",
-		"match-sorter": "^6.3.1",
-		"method-override": "^3.0.0",
-		"pg": "^8.7.3",
-		"sequelize": "^6.20.1",
-		"string-similarity": "^4.0.4"
-	},
-	"devDependencies": {
-		"eslint": "^8.17.0",
-		"eslint-config-airbnb": "^19.0.4",
-		"eslint-plugin-import": "^2.26.0",
-		"eslint-plugin-jsx-a11y": "^6.5.1",
-		"eslint-plugin-react": "^7.30.0",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"sequelize-cli": "^6.4.1"
-	}
+  "scripts": {
+    "start": "nodemon index.mjs",
+    "migrate": "npx sequelize db:migrate",
+    "undo migrate": "npx sequelize db:migrate:undo",
+    "redo migrate": "npx sequelize db:migrate:undo && npx sequelize db:migrate",
+    "seed": "npx sequelize db:seed:all",
+    "redo seed": "npx sequelize db:migrate:undo && npx sequelize db:migrate && npx sequelize db:seed:all"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "compromise": "^14.3.1",
+    "compromise-dates": "^3.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "fastest-levenshtein": "^1.0.12",
+    "fuzzysearch": "^1.0.3",
+    "googleapis": "^103.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "match-sorter": "^6.3.1",
+    "method-override": "^3.0.0",
+    "pg": "^8.7.3",
+    "querystring": "^0.2.1",
+    "sequelize": "^6.20.1",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "sequelize-cli": "^6.4.1"
+  }
 }

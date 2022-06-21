@@ -1,6 +1,7 @@
 const formatFoodItem = (foodItem) => {
   // filter data
   const shelfLifeItems = foodItem.shelf_life_items.map((item) => ({
+    shelfLifeItemId: item.id,
     categoryId: item.categoryId,
     categoryName: item.category.name,
     shelfLifeDays: item.shelfLifeDays,
@@ -25,7 +26,6 @@ const formatFoodItem = (foodItem) => {
   }));
 
   return {
-    id: foodItem.id,
     name: foodItem.name,
     categories,
     category: '',

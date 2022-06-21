@@ -1,11 +1,11 @@
-const food_items = require('./data/food_items');
-const categories = require('./data/categories');
-const storage = require('./data/storage');
-const shelf_life_items = require('./data/shelf_life_items');
+const foodItems = require('./data/food_items.js');
+const categories = require('./data/categories.js');
+const storage = require('./data/storage.js');
+const shelfLifeItems = require('./data/shelf_life_items.js');
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    food_items.forEach((item) => {
+  async up(queryInterface) {
+    foodItems.forEach((item) => {
       item.created_at = new Date();
       item.updated_at = new Date();
     });
@@ -17,7 +17,7 @@ module.exports = {
       item.created_at = new Date();
       item.updated_at = new Date();
     });
-    shelf_life_items.forEach((item) => {
+    shelfLifeItems.forEach((item) => {
       item.created_at = new Date();
       item.updated_at = new Date();
     });
@@ -32,13 +32,13 @@ module.exports = {
         updated_at: new Date(),
       },
     ]);
-    await queryInterface.bulkInsert('food_items', food_items);
+    await queryInterface.bulkInsert('food_items', foodItems);
     await queryInterface.bulkInsert('categories', categories);
     await queryInterface.bulkInsert('storage', storage);
-    await queryInterface.bulkInsert('shelf_life_items', shelf_life_items);
+    await queryInterface.bulkInsert('shelf_life_items', shelfLifeItems);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.bulkDelete('shelf_life_items', null, {});
     await queryInterface.bulkDelete('food_items', null, {});
     await queryInterface.bulkDelete('categories', null, {});
