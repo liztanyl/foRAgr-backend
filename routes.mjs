@@ -11,6 +11,7 @@ export default function bindRoutes(app) {
   const UserController = initUserController(db);
 
   app.get('/', (request, response) => {
+    // eslint-disable-next-line no-undef
     response.sendFile(resolve('dist', 'main.html'));
   });
 

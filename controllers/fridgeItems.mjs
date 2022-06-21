@@ -29,7 +29,7 @@ export default function initFridgeItemsController(db) {
         },
       });
 
-      const dataToClient = fridgeItems.map((item) => formatFridgeItem(item));
+      const dataToClient = fridgeItems?.map((item) => formatFridgeItem(item));
       response.send(dataToClient);
     } catch (err) {
       console.log(err.message);
@@ -72,8 +72,9 @@ export default function initFridgeItemsController(db) {
   const destroy = async (request, response) => {
     try {
       const { itemId } = request.params;
-      await db.FridgeItem.destroy({ where: { id: itemId } });
-      response.send('success');
+      const item = await db.FridgeItem.findOne({ where: { id: itemId } });
+      await item.destroy();
+      response.send(item.notificationIdentifier);
     } catch (err) {
       console.log(err.message);
       response.send('Something went wrong');
