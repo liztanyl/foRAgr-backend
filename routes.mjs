@@ -23,4 +23,5 @@ export default function bindRoutes(app) {
   app.post('/photoData', PhotoDataController.addPhotoData);
 
   app.get('/user/getGoogleAuthUrl', UserController.getGoogleAuthUrl);
+  app.post('/user/getAccessToken', UserController.getAccessToken);
 }
