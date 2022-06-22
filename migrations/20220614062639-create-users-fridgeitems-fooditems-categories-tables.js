@@ -12,16 +12,20 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING,
       },
-      password: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      login_credential: {
+      given_name: {
         allowNull: true,
         type: Sequelize.STRING,
       },
-      name: {
-        allowNull: false,
+      family_name: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      picture: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       created_at: {
