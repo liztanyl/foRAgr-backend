@@ -25,4 +25,5 @@ export default function bindRoutes(app) {
 
   app.get('/user/getGoogleAuthUrl', UserController.getGoogleAuthUrl);
   app.post('/user/getAccessToken', UserController.getAccessToken);
+  app.post('/user/logout', UserController.logout);
 }
