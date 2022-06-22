@@ -53,97 +53,86 @@ const {
 
 const acceptedCategories = ['Dairy / Eggs', 'Bakery / Baking Needs', 'Beverages', 'Breakfast', 'Canned Food', 'Breakfast', 'Fruits & Vegetables', 'Meat', 'Seafood', 'Snacks', 'Rice / Noodles / Pasta', 'Oil / Cooking Paste & Sauces', 'Condiments & Seasonings', 'Soups', 'Dried / Preserved Food'];
 
-describe('fridgeItems', () => {
-  describe('formatFridgeItem', () => {
-    describe('function', () => {
-      it('Function should be a function', () => {
-        assert.isFunction(formatFridgeItem);
-      });
+describe('formatFridgeItem', () => {
+  describe('function', () => {
+    it('Function should be a function', () => {
+      assert.isFunction(formatFridgeItem);
+    });
 
-      it('Function should return an object', () => {
-        assert.typeOf(mainResult, 'object');
-      });
+    it('Function should return an object', () => {
+      assert.typeOf(mainResult, 'object');
+    });
 
-      it('Object returned should have all appropriate keys', () => {
-        assert.hasAllKeys(mainResult, ['id', 'name', 'category', 'storageMethod', 'shelfLifeDays', 'purchaseDate', 'expiryDate', 'notes']);
+    it('Object returned should have all appropriate keys', () => {
+      assert.hasAllKeys(mainResult, ['id', 'name', 'category', 'storageMethod', 'shelfLifeDays', 'purchaseDate', 'expiryDate', 'notes']);
+    });
+  });
+
+  describe('return', () => {
+    describe('id', () => {
+      it('Returned ID should be a number above 0', () => {
+        assert.typeOf(returnedId, 'number');
+        assert.isAbove(returnedId, 0);
       });
     });
 
-    describe('return', () => {
-      describe('id', () => {
-        it('Returned ID should be a number', () => {
-          assert.typeOf(returnedId, 'number');
-        });
+    describe('name', () => {
+      it('Returned Name should be a string that is not empty', () => {
+        assert.typeOf(returnedName, 'string');
+        assert.isAbove(returnedName.length, 0);
+      });
+    });
 
-        it('Returned ID should be above 0', () => {
-          assert.isAbove(returnedId, 0);
-        });
+    describe('category', () => {
+      it('Returned Category should be a string', () => {
+        assert.typeOf(returnedCategory, 'string');
       });
 
-      describe('name', () => {
-        it('Returned Name should be a string', () => {
-          assert.typeOf(returnedName, 'string');
-        });
+      it('Returned Category one of the accepted categories', () => {
+        assert.oneOf(returnedCategory, acceptedCategories);
+      });
+    });
 
-        it('Returned Name should not be an empty string', () => {
-          assert.isAbove(returnedName.length, 0);
-        });
+    describe('storage', () => {
+      it('Returned Storage Method should be a string', () => {
+        assert.typeOf(returnedStorageMethod, 'string');
       });
 
-      describe('category', () => {
-        it('Returned Category should be a string', () => {
-          assert.typeOf(returnedCategory, 'string');
-        });
+      it('Returned Storage Method is either "Freezer", "Fridge" or "Pantry"', () => {
+        assert.oneOf(returnedStorageMethod, ['Freezer', 'Fridge', 'Pantry']);
+      });
+    });
 
-        it('Returned Category one of the accepted categories', () => {
-          assert.oneOf(returnedCategory, acceptedCategories);
-        });
+    describe('shelf life days', () => {
+      it('Returned Shelf Life Days should be a number above 0', () => {
+        assert.typeOf(returnedShelfLifeDays, 'number');
+        assert.isAbove(returnedShelfLifeDays, 0);
+      });
+    });
+
+    describe('purchase date', () => {
+      it('Returned Purchase Date should be a string', () => {
+        assert.typeOf(returnedPurchaseDate, 'string');
       });
 
-      describe('storage', () => {
-        it('Returned Storage Method should be a string', () => {
-          assert.typeOf(returnedStorageMethod, 'string');
-        });
+      it('Returned Purchase Date should be a valid date', () => {
+        assert.isTrue(moment(returnedPurchaseDate).isValid());
+      });
+    });
 
-        it('Returned Storage Method is either "Freezer", "Fridge" or "Pantry"', () => {
-          assert.oneOf(returnedStorageMethod, ['Freezer', 'Fridge', 'Pantry']);
-        });
+    describe('expiry date', () => {
+      it('Returned Expiry Date should be a string', () => {
+        assert.typeOf(returnedExpiryDate, 'string');
       });
 
-      describe('shelf life days', () => {
-        it('Returned Shelf Life Days should be a number', () => {
-          assert.typeOf(returnedShelfLifeDays, 'number');
-        });
-
-        it('Returned Shelf Life Days should be above 0', () => {
-          assert.isAbove(returnedShelfLifeDays, 0);
-        });
+      it('Returned Expiry Date should be a valid date', () => {
+        assert.isTrue(moment(returnedExpiryDate).isValid());
       });
+    });
 
-      describe('purchase date', () => {
-        it('Returned Purchase Date should be a string', () => {
-          assert.typeOf(returnedPurchaseDate, 'string');
-        });
-
-        it('Returned Purchase Date should be a valid date', () => {
-          assert.isTrue(moment(returnedPurchaseDate).isValid());
-        });
-      });
-
-      describe('expiry date', () => {
-        it('Returned Expiry Date should be a string', () => {
-          assert.typeOf(returnedExpiryDate, 'string');
-        });
-
-        it('Returned Expiry Date should be a valid date', () => {
-          assert.isTrue(moment(returnedExpiryDate).isValid());
-        });
-      });
-
-      describe('notes', () => {
-        it('Returned Notes should be a string', () => {
-          assert.typeOf(returnedNotes, 'string');
-        });
+    describe('notes', () => {
+      it('Returned Notes should be a string', () => {
+        assert.typeOf(returnedNotes, 'string');
       });
     });
   });

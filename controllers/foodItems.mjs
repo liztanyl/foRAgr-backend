@@ -1,4 +1,4 @@
-const formatFoodItem = (foodItem) => {
+export const formatFoodItem = (foodItem) => {
   // filter data
   const shelfLifeItems = foodItem.shelf_life_items.map((item) => ({
     shelfLifeItemId: item.id,
@@ -37,7 +37,7 @@ const formatFoodItem = (foodItem) => {
   };
 };
 
-export default function initFoodItemsController(db) {
+export function initFoodItemsController(db) {
   const index = async (request, response) => {
     try {
       const foodItems = await db.FoodItem.findAll({

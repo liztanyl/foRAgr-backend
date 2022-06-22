@@ -1,5 +1,5 @@
 import db from './models/index.mjs';
-import initFoodItemsController from './controllers/foodItems.mjs';
+import { initFoodItemsController } from './controllers/foodItems.mjs';
 import { initFridgeItemsController } from './controllers/fridgeItems.mjs';
 import initPhotoDataController from './controllers/photoData.mjs';
 import initUserController from './controllers/users.mjs';
