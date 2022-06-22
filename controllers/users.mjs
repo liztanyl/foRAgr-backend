@@ -94,7 +94,9 @@ export default function initUserController(db) {
 
         // CHECK DB FOR EXISTING USERS
         const existingUser = await db.User.findOne({
-          where: { email, name, givenName, familyName, picture },
+          where: {
+            email, name, givenName, familyName, picture,
+          },
         });
 
         if (existingUser) {
