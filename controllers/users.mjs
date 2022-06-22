@@ -10,7 +10,7 @@ dotenv.config();
 const oauth2Client = new google.auth.OAuth2(
   process.env.OAUTH_CLIENT_ID,
   process.env.OAUTH_CLIENT_SECRET,
-  `${FRONTEND_URL}/auth/google`
+  `${FRONTEND_URL}/auth/google`,
 );
 
 function getGoogleAuthURLHelper() {
@@ -55,11 +55,9 @@ export default function initUserController(db) {
               headers: {
                 Authorization: `Bearer ${tokens.id_token}`,
               },
-            }
+            },
           )
-          .then((response) => {
-            return response.data;
-          })
+          .then((response) => response.data)
           .catch((error) => {
             throw new Error(error.message);
           });
