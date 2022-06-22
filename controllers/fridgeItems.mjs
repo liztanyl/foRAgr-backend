@@ -46,7 +46,7 @@ export default function initFridgeItemsController(db) {
         items,
         {
           fields:
-          ['userId', 'shelfLifeItemId', 'addedOn', 'expiry', 'notes'],
+          ['userId', 'shelfLifeItemId', 'addedOn', 'expiry', 'notes', 'notificationIdentifier'],
         },
       );
 

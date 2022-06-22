@@ -10,7 +10,7 @@ dotenv.config();
 const oauth2Client = new google.auth.OAuth2(
   process.env.OAUTH_CLIENT_ID,
   process.env.OAUTH_CLIENT_SECRET,
-  `${FRONTEND_URL}/auth/google`
+  `${FRONTEND_URL}/auth/google`,
 );
 
 function getGoogleAuthURLHelper() {
@@ -74,7 +74,7 @@ export default function initUserController(db) {
               headers: {
                 Authorization: `Bearer ${tokens.id_token}`,
               },
-            }
+            },
           )
           .then((response) => response.data)
           .catch((error) => {
@@ -94,7 +94,9 @@ export default function initUserController(db) {
 
         // CHECK DB FOR EXISTING USERS
         const existingUser = await db.User.findOne({
-          where: { email, name, givenName, familyName, picture },
+          where: {
+            email, name, givenName, familyName, picture,
+          },
         });
 
         if (existingUser) {
