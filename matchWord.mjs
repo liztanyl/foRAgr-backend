@@ -10,7 +10,7 @@ import ingredientsList from './ingredientsData/foodItemsDatam.mjs';
 nlp.plugin(datePlugin);
 
 // to process input
-const processInput = (inputTerms) => {
+export const processInput = (inputTerms) => {
   const originalTerm = inputTerms;
   const newTerm = originalTerm.replace(/\//g, ' ');
   const removedNumbersAttached = newTerm.replace(/(\d+)/g, ' ');
@@ -39,7 +39,7 @@ const processInput = (inputTerms) => {
 
 // to match detected input
 // eslint-disable-next-line consistent-return
-const matchChecker = (detectedInput, originalName) => {
+export const matchChecker = (detectedInput, originalName) => {
   const ingredientsListSplit = ingredientsList.map((item) => ({
     keyWords: item.split(' '),
     itemName: item,
@@ -134,7 +134,7 @@ const matchChecker = (detectedInput, originalName) => {
 // sample data --> can be edited to add in result that is parsed
 // const ocr = ocrResponse4[0].description.split('\n');
 
-const getMatches = (detection) => {
+export const getMatches = (detection) => {
   const ocr = detection.description.split('\n');
   const foundData = [];
   ocr.forEach((lineItem) => {

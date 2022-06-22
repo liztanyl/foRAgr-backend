@@ -5,10 +5,12 @@
     "undo migrate": "npx sequelize db:migrate:undo",
     "redo migrate": "npx sequelize db:migrate:undo && npx sequelize db:migrate",
     "seed": "npx sequelize db:seed:all",
-    "redo seed": "npx sequelize db:migrate:undo && npx sequelize db:migrate && npx sequelize db:seed:all"
+    "redo seed": "npx sequelize db:migrate:undo && npx sequelize db:migrate && npx sequelize db:seed:all",
+    "test": "mocha"
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "chai": "^4.3.6",
     "compromise": "^14.3.1",
     "compromise-dates": "^3.4.0",
     "cookie-parser": "^1.4.6",
@@ -21,6 +23,7 @@
     "jsonwebtoken": "^8.5.1",
     "match-sorter": "^6.3.1",
     "method-override": "^3.0.0",
+    "mocha": "^10.0.0",
     "pg": "^8.7.3",
     "querystring": "^0.2.1",
     "sequelize": "^6.20.1",
