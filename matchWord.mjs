@@ -13,9 +13,9 @@ nlp.plugin(datePlugin);
 export const processInput = (inputTerms) => {
   const originalTerm = inputTerms;
   const newTerm = originalTerm.replace(/\//g, ' ');
-  const removedNumbersAttached = newTerm.replace(/(\d+)/g, ' ');
+  const removedNumbersAttached = newTerm.replace(/(\d+\w+)/g, ' ');
 
-  const doc = nlp(removedNumbersAttached);
+  const doc = nlp(removedNumbersAttached.trim());
   const regex = /(?:\d.\d{1,3}\s?(x|X)\s?\d.\d{1,3})/g;
   if (
     inputTerms.match(/(S\(\d{6}\))/g)
