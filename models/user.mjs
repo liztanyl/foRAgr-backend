@@ -13,16 +13,20 @@ export default function initUserModel(sequelize, DataTypes) {
         isEmail: true,
         type: DataTypes.STRING,
       },
-      password: {
+      name: {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      loginCredential: {
+      givenName: {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      name: {
-        allowNull: false,
+      familyName: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      picture: {
+        allowNull: true,
         type: DataTypes.STRING,
       },
       createdAt: {
@@ -37,6 +41,6 @@ export default function initUserModel(sequelize, DataTypes) {
     {
       tableName: 'users',
       underscored: true,
-    },
+    }
   );
 }
