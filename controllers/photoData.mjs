@@ -1,4 +1,4 @@
-import getMatches from '../matchWord.mjs';
+import { getMatches } from '../matchWord.mjs';
 
 export default function initPhotoDataController(db) {
   const addPhotoData = async (request, response) => {
