@@ -185,6 +185,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT,
       },
+      notification_identifier: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

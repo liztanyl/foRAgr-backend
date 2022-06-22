@@ -11,6 +11,7 @@ export default function bindRoutes(app) {
   const UserController = initUserController(db);
 
   app.get('/', (request, response) => {
+    // eslint-disable-next-line no-undef
     response.sendFile(resolve('dist', 'main.html'));
   });
 
@@ -20,6 +21,7 @@ export default function bindRoutes(app) {
   app.get('/fridgeItems/index', FridgeItemsController.index);
   app.post('/fridgeItems/add', FridgeItemsController.add);
   app.post('/fridgeItems/destroy/:itemId', FridgeItemsController.destroy);
+  app.post('/fridgeItems/notification/add/:id', FridgeItemsController.addNotification);
 
   app.post('/photoData', PhotoDataController.addPhotoData);
 
