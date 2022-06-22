@@ -29,6 +29,7 @@ export default function initFridgeItemsController(db) {
         },
       });
 
+      // TODO: add condition when fridgeItems = 0
       const dataToClient = fridgeItems?.map((item) => formatFridgeItem(item));
       response.send(dataToClient);
     } catch (err) {
@@ -73,13 +74,33 @@ export default function initFridgeItemsController(db) {
     try {
       const { itemId } = request.params;
       const item = await db.FridgeItem.findOne({ where: { id: itemId } });
+      const dataToClient = item.notificationIdentifier;
       await item.destroy();
-      response.send(item.notificationIdentifier);
+      response.send(dataToClient);
     } catch (err) {
       console.log(err.message);
       response.send('Something went wrong');
     }
   };
 
-  return { index, add, destroy };
+  const addNotification = async (request, response) => {
+    try {
+      const { id } = request.params;
+      const { notificationIdentifier } = request.body;
+
+      await db.FridgeItem.update({ notificationIdentifier }, { where: { id } });
+
+      response.status(200);
+    } catch (err) {
+      console.log(err.message);
+      response.send('Something went wrong');
+    }
+  };
+
+  return {
+    index,
+    add,
+    destroy,
+    addNotification,
+  };
 }
