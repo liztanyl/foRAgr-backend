@@ -1,4 +1,4 @@
-const formatFridgeItem = (item) => {
+export const formatFridgeItem = (item) => {
   const {
     food_item: foodItem, category, storage, shelfLifeDays,
   } = item.shelf_life_item;
@@ -15,7 +15,7 @@ const formatFridgeItem = (item) => {
   };
 };
 
-export default function initFridgeItemsController(db) {
+export function initFridgeItemsController(db) {
   const index = async (request, response) => {
     try {
       const fridgeItems = await db.FridgeItem.findAll({
