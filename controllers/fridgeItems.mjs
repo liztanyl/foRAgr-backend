@@ -1,6 +1,11 @@
+import { userIdFromJwt, assignUserIdToItems } from './helperFunctions.mjs';
+
 export const formatFridgeItem = (item) => {
   const {
-    food_item: foodItem, category, storage, shelfLifeDays,
+    food_item: foodItem,
+    category,
+    storage,
+    shelfLifeDays,
   } = item.shelf_life_item;
 
   return {
@@ -22,10 +27,18 @@ export function initFridgeItemsController(db) {
         where: { userId: 1 },
         include: {
           model: db.ShelfLifeItem,
-          attributes: ['id', 'foodItemId', 'categoryId', 'storageId', 'shelfLifeDays'],
-          include: [{ model: db.FoodItem, attributes: ['id', 'name'] },
+          attributes: [
+            'id',
+            'foodItemId',
+            'categoryId',
+            'storageId',
+            'shelfLifeDays',
+          ],
+          include: [
+            { model: db.FoodItem, attributes: ['id', 'name'] },
             { model: db.Category, attributes: ['id', 'name'] },
-            { model: db.Storage, attributes: ['id', 'name'] }],
+            { model: db.Storage, attributes: ['id', 'name'] },
+          ],
         },
       });
 
@@ -40,29 +53,45 @@ export function initFridgeItemsController(db) {
 
   const add = async (request, response) => {
     try {
-      const items = request.body;
-
-      const addedItems = await db.FridgeItem.bulkCreate(
-        items,
-        {
-          fields:
-          ['userId', 'shelfLifeItemId', 'addedOn', 'expiry', 'notes', 'notificationIdentifier'],
-        },
-      );
+      const { items, userToken } = request.body;
+      const userId = await userIdFromJwt(userToken, db);
+      const updatedItems = assignUserIdToItems(items, userId);
+      const addedItems = await db.FridgeItem.bulkCreate(updatedItems, {
+        fields: [
+          'userId',
+          'shelfLifeItemId',
+          'addedOn',
+          'expiry',
+          'notes',
+          'notificationIdentifier',
+        ],
+      });
 
       const addedItemsIds = addedItems.map((item) => item.id);
       const addedItemsDetails = await db.FridgeItem.findAll({
         where: { id: addedItemsIds },
         include: {
           model: db.ShelfLifeItem,
-          attributes: ['id', 'foodItemId', 'categoryId', 'storageId', 'shelfLifeDays'],
-          include: [{ model: db.FoodItem, attributes: ['id', 'name'] },
+          attributes: [
+            'id',
+            'foodItemId',
+            'categoryId',
+            'storageId',
+            'shelfLifeDays',
+          ],
+          include: [
+            { model: db.FoodItem, attributes: ['id', 'name'] },
             { model: db.Category, attributes: ['id', 'name'] },
-            { model: db.Storage, attributes: ['id', 'name'] }],
+            { model: db.Storage, attributes: ['id', 'name'] },
+          ],
         },
       });
 
-      const dataToClient = addedItemsDetails.map((item) => formatFridgeItem(item));
+      const dataToClient = addedItemsDetails.map((item) =>
+        formatFridgeItem(item)
+      );
+
+      console.log(dataToClient);
       response.send(dataToClient);
     } catch (err) {
       console.log(err.message);
