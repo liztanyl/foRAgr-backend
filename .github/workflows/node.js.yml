@@ -15,4 +15,3 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm ci
       - run: npm test
-      - run: npm run start
