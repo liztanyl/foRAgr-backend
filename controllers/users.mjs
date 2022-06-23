@@ -69,7 +69,6 @@ export default function initUserController(db) {
 
       // Package google user data as a jwt, then send as a cookie
       const token = jwt.sign(userData, process.env.JWT_SECRET_KEY);
-      console.log(token);
 
       // CHECK DB FOR EXISTING USERS
       const existingUser = await db.User.findOne({
@@ -150,16 +149,8 @@ export default function initUserController(db) {
 
   const loginMobile = async (req, res) => {
     try {
-      console.log('LOGIN MOBILE');
-      console.log(req.body);
       const googleUser = req.body;
       const userData = await userDataToDb(googleUser);
-      console.log('USER DATA FROM DB');
-      console.log(userData);
-
-      console.log(
-        'SENDING USER DATA TO FRONTEND AFTER COMPLETING BE VERIFICATION'
-      );
       res.send(userData);
     } catch (err) {
       console.log(err);
