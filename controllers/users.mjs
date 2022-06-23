@@ -10,7 +10,7 @@ dotenv.config();
 const oauth2Client = new google.auth.OAuth2(
   process.env.OAUTH_CLIENT_ID,
   process.env.OAUTH_CLIENT_SECRET,
-  `${FRONTEND_URL}/auth/google`,
+  `${FRONTEND_URL}/auth/google`
 );
 
 function getGoogleAuthURLHelper() {
@@ -61,6 +61,53 @@ export default function initUserController(db) {
     }
   };
 
+  const userDataToDb = async (userData) => {
+    try {
+      const { email, name, picture } = userData;
+      const givenName = userData.given_name;
+      const familyName = userData.family_name;
+
+      // Package google user data as a jwt, then send as a cookie
+      const token = jwt.sign(userData, process.env.JWT_SECRET_KEY);
+      console.log(token);
+
+      // CHECK DB FOR EXISTING USERS
+      const existingUser = await db.User.findOne({
+        where: {
+          email,
+          name,
+          givenName,
+          familyName,
+          picture,
+        },
+      });
+
+      if (existingUser) {
+        return {
+          userData: existingUser,
+          newUser: false,
+          token,
+        };
+      }
+
+      const newUser = await db.User.create({
+        email,
+        name,
+        givenName,
+        familyName,
+        picture,
+      });
+
+      return {
+        userData: newUser,
+        newUser: true,
+        token,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const getAccessToken = async (req, res) => {
     try {
       const { authCode } = req.body;
@@ -74,55 +121,48 @@ export default function initUserController(db) {
               headers: {
                 Authorization: `Bearer ${tokens.id_token}`,
               },
-            },
+            }
           )
           .then((response) => response.data)
           .catch((error) => {
             throw new Error(error.message);
           });
 
-        // console.log(googleUser);
-        const { email, name, picture } = googleUser;
-        const givenName = googleUser.given_name;
-        const familyName = googleUser.family_name;
-
-        // Package google user data as a jwt, then send as a cookie
-        const token = jwt.sign(googleUser, process.env.JWT_SECRET_KEY);
-
-        res.cookie('token', token);
-        res.cookie('logged_in_user', JSON.stringify(googleUser));
-
-        // CHECK DB FOR EXISTING USERS
-        const existingUser = await db.User.findOne({
-          where: {
-            email, name, givenName, familyName, picture,
-          },
-        });
-
-        if (existingUser) {
-          console.log('exiosting user');
-          console.log(existingUser);
-          res.send(`Logging in: ${email}`);
-        } else {
-          const newUser = await db.User.create({
-            email,
-            name,
-            givenName,
-            familyName,
-            picture,
-          });
-          console.log('creating new User');
-          console.log(newUser);
+        console.log(googleUser);
+        const { newUser, token } = userDataToDb(googleUser);
+        if (newUser) {
+          res.cookie('token', token);
+          res.cookie('logged_in_user', JSON.stringify(googleUser));
           res.send('New user registered');
+        } else {
+          res.cookie('token', token);
+          res.cookie('logged_in_user', JSON.stringify(googleUser));
+          res.send('Logged in existing user');
         }
-
-        // res.send(token);
       } else {
         res.status(401).send('Invalid login');
       }
     } catch (err) {
       console.log(err);
       res.status(401).send('Invalid login');
+    }
+  };
+
+  const loginMobile = async (req, res) => {
+    try {
+      console.log('LOGIN MOBILE');
+      console.log(req.body);
+      const googleUser = req.body;
+      const userData = await userDataToDb(googleUser);
+      console.log('USER DATA FROM DB');
+      console.log(userData);
+
+      console.log(
+        'SENDING USER DATA TO FRONTEND AFTER COMPLETING BE VERIFICATION'
+      );
+      res.send(userData);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -140,6 +180,7 @@ export default function initUserController(db) {
   return {
     getGoogleAuthUrl,
     getAccessToken,
+    loginMobile,
     logout,
   };
 }

@@ -21,11 +21,15 @@ export default function bindRoutes(app) {
   app.get('/fridgeItems/index', FridgeItemsController.index);
   app.post('/fridgeItems/add', FridgeItemsController.add);
   app.post('/fridgeItems/destroy/:itemId', FridgeItemsController.destroy);
-  app.post('/fridgeItems/notification/add/:id', FridgeItemsController.addNotification);
+  app.post(
+    '/fridgeItems/notification/add/:id',
+    FridgeItemsController.addNotification
+  );
 
   app.post('/photoData', PhotoDataController.addPhotoData);
 
   app.get('/user/getGoogleAuthUrl', UserController.getGoogleAuthUrl);
   app.post('/user/getAccessToken', UserController.getAccessToken);
+  app.post('/user/loginMobile', UserController.loginMobile);
   app.post('/user/logout', UserController.logout);
 }
