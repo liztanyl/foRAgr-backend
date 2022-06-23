@@ -20,7 +20,8 @@ export default function bindRoutes(app) {
 
   app.get('/fridgeItems/index', FridgeItemsController.index);
   app.post('/fridgeItems/add', FridgeItemsController.add);
-  app.post('/fridgeItems/destroy/:itemId', FridgeItemsController.destroy);
+  app.post('/fridgeItems/destroy', FridgeItemsController.destroy);
+
   app.post(
     '/fridgeItems/notification/add/:id',
     FridgeItemsController.addNotification

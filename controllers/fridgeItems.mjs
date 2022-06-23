@@ -101,8 +101,12 @@ export function initFridgeItemsController(db) {
 
   const destroy = async (request, response) => {
     try {
-      const { itemId } = request.params;
-      const item = await db.FridgeItem.findOne({ where: { id: itemId } });
+      const { itemId, userToken } = request.body;
+      const userId = await userIdFromJwt(userToken, db);
+      const item = await db.FridgeItem.findOne({
+        where: { id: itemId, userId },
+      });
+
       const dataToClient = item.notificationIdentifier;
       await item.destroy();
       response.send(dataToClient);
