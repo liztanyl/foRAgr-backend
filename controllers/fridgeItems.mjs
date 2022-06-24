@@ -23,8 +23,10 @@ export const formatFridgeItem = (item) => {
 export function initFridgeItemsController(db) {
   const index = async (request, response) => {
     try {
+      const { userToken } = request.params;
+      const userId = await userIdFromJwt(userToken, db);
       const fridgeItems = await db.FridgeItem.findAll({
-        where: { userId: 1 },
+        where: { userId },
         include: {
           model: db.ShelfLifeItem,
           attributes: [
@@ -119,9 +121,13 @@ export function initFridgeItemsController(db) {
   const addNotification = async (request, response) => {
     try {
       const { id } = request.params;
-      const { notificationIdentifier } = request.body;
+      const { notificationIdentifier, userToken } = request.body;
+      const userId = await userIdFromJwt(userToken, db);
 
-      await db.FridgeItem.update({ notificationIdentifier }, { where: { id } });
+      await db.FridgeItem.update(
+        { notificationIdentifier },
+        { where: { id, userId } }
+      );
 
       response.status(200);
     } catch (err) {
