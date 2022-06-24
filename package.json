@@ -24,6 +24,7 @@
     "match-sorter": "^6.3.1",
     "method-override": "^3.0.0",
     "moment": "^2.29.3",
+    "nodemon": "^2.0.16",
     "pg": "^8.7.3",
     "querystring": "^0.2.1",
     "sequelize": "^6.20.1",
