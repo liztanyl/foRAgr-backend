@@ -24,7 +24,8 @@ export function initFridgeItemsController(db) {
   const index = async (request, response) => {
     try {
       const { userToken } = request.params;
-      const userId = await userIdFromJwt(userToken, db);
+      const userCookie = request.cookies.token;
+      const userId = await userIdFromJwt(userCookie ?? userToken, db);
       const fridgeItems = await db.FridgeItem.findAll({
         where: { userId },
         include: {
@@ -56,7 +57,8 @@ export function initFridgeItemsController(db) {
   const add = async (request, response) => {
     try {
       const { items, userToken } = request.body;
-      const userId = await userIdFromJwt(userToken, db);
+      const userCookie = request.cookies.token;
+      const userId = await userIdFromJwt(userCookie ?? userToken, db);
       const updatedItems = assignUserIdToItems(items, userId);
       const addedItems = await db.FridgeItem.bulkCreate(updatedItems, {
         fields: [
@@ -104,7 +106,8 @@ export function initFridgeItemsController(db) {
   const destroy = async (request, response) => {
     try {
       const { itemId, userToken } = request.body;
-      const userId = await userIdFromJwt(userToken, db);
+      const userCookie = request.cookies.token;
+      const userId = await userIdFromJwt(userCookie ?? userToken, db);
       const item = await db.FridgeItem.findOne({
         where: { id: itemId, userId },
       });
@@ -123,7 +126,6 @@ export function initFridgeItemsController(db) {
       const { id } = request.params;
       const { notificationIdentifier, userToken } = request.body;
       const userId = await userIdFromJwt(userToken, db);
-
       await db.FridgeItem.update(
         { notificationIdentifier },
         { where: { id, userId } }
