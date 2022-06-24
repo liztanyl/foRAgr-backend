@@ -91,7 +91,9 @@ export function initFridgeItemsController(db) {
         },
       });
 
-      const dataToClient = addedItemsDetails.map((item) => formatFridgeItem(item));
+      const dataToClient = addedItemsDetails.map((item) =>
+        formatFridgeItem(item)
+      );
 
       console.log(dataToClient);
       response.send(dataToClient);
@@ -122,8 +124,10 @@ export function initFridgeItemsController(db) {
   const editExpiry = async (request, response) => {
     try {
       const { itemId, userToken, dateChanged } = request.body;
+      const userCookie = request.cookies.token;
+
       console.log(itemId, userToken, dateChanged);
-      const userId = await userIdFromJwt(userToken, db);
+      const userId = await userIdFromJwt(userCookie ?? userToken, db);
       console.log(userId);
       const updatedItem = await db.FridgeItem.update(
         {
@@ -131,7 +135,7 @@ export function initFridgeItemsController(db) {
         },
         {
           where: { id: itemId, userId },
-        },
+        }
       );
 
       console.log(updatedItem, 'item');
