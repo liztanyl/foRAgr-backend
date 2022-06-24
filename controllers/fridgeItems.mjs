@@ -89,9 +89,7 @@ export function initFridgeItemsController(db) {
         },
       });
 
-      const dataToClient = addedItemsDetails.map((item) =>
-        formatFridgeItem(item)
-      );
+      const dataToClient = addedItemsDetails.map((item) => formatFridgeItem(item));
 
       console.log(dataToClient);
       response.send(dataToClient);
@@ -112,6 +110,30 @@ export function initFridgeItemsController(db) {
       const dataToClient = item.notificationIdentifier;
       await item.destroy();
       response.send(dataToClient);
+    } catch (err) {
+      console.log(err.message);
+      response.send('Something went wrong');
+    }
+  };
+
+  const editExpiry = async (request, response) => {
+    try {
+      const { itemId, userToken, dateChanged } = request.body;
+      console.log(itemId, userToken, dateChanged);
+      const userId = await userIdFromJwt(userToken, db);
+      console.log(userId);
+      const updatedItem = await db.FridgeItem.update(
+        {
+          expiry: dateChanged,
+        },
+        {
+          where: { id: itemId, userId },
+        },
+      );
+
+      console.log(updatedItem, 'item');
+
+      response.send({ itemId });
     } catch (err) {
       console.log(err.message);
       response.send('Something went wrong');
@@ -141,5 +163,6 @@ export function initFridgeItemsController(db) {
     add,
     destroy,
     addNotification,
+    editExpiry,
   };
 }

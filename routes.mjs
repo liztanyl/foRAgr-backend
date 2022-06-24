@@ -24,8 +24,10 @@ export default function bindRoutes(app) {
 
   app.post(
     '/fridgeItems/notification/add/:id',
-    FridgeItemsController.addNotification
+    FridgeItemsController.addNotification,
   );
+
+  app.post('/extendShelfLife', FridgeItemsController.editExpiry);
 
   app.post('/photoData', PhotoDataController.addPhotoData);
 
