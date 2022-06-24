@@ -26,31 +26,6 @@ function getGoogleAuthURLHelper() {
   });
 }
 
-// VERIFICATION MIDDLEWARE
-export const verifyLoggedInUser = (req, res, next) => {
-  try {
-    const noVerifyPaths = [
-      '/user/logout',
-      '/user/getGoogleAuthUrl',
-      '/user/getAccessToken',
-    ];
-    const { token } = req.cookies;
-    if (noVerifyPaths.includes(req.path)) {
-      next();
-    } else {
-      const { email } = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      if (email) {
-        next();
-      }
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(401).send('No Access');
-    // REDIRECT TO LOGIN PAGE
-    // (useEffect on all components on frontend to redirect to login page on err.res.status of 401)
-  }
-};
-
 export default function initUserController(db) {
   const getGoogleAuthUrl = async (req, res) => {
     try {
@@ -128,7 +103,8 @@ export default function initUserController(db) {
           });
 
         console.log(googleUser);
-        const { newUser, token } = userDataToDb(googleUser);
+        const { newUser, token } = await userDataToDb(googleUser);
+
         if (newUser) {
           res.cookie('token', token);
           res.cookie('logged_in_user', JSON.stringify(googleUser));
