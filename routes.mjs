@@ -18,7 +18,7 @@ export default function bindRoutes(app) {
   app.get('/foodItems/index', FoodItemsController.index);
   app.get('/reviewItems/:reviewItemIds', FoodItemsController.reviewItems);
 
-  app.get('/fridgeItems/index', FridgeItemsController.index);
+  app.get('/fridgeItems/index/:userToken', FridgeItemsController.index);
   app.post('/fridgeItems/add', FridgeItemsController.add);
   app.post('/fridgeItems/destroy', FridgeItemsController.destroy);
 
