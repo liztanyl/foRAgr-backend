@@ -4,14 +4,14 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import bindRoutes from './routes.mjs';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://192.168.18.17:19006';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://127.0.0.1:19006' || 'http://localhost:19006';
 
 const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: [FRONTEND_URL, 'http://localhost:19006', 'http://127.0.0.1:19006'],
-  })
+    origin: FRONTEND_URL,
+  }),
 );
 
 app.use(cookieParser());
