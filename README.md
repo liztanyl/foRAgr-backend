@@ -2,7 +2,7 @@
 
 <img src='https://user-images.githubusercontent.com/94110588/177002458-e6edbb95-16f0-4cef-9322-14e2bf2ffb47.png' width='100' alt='logo'/>
 
-> **Note: This is the backend repo. The frontend repo, along with features and previews of the app, can be viewed [here](https://github.com/gcskhor/project6-frontend).**
+> **Note: This is the backend repo. The frontend repo, along with features and previews of the app, can be viewed [here](https://github.com/liztanyl/foRAgr-frontend).**
 
 foRAg'r is a mobile app that helps user keep track of food items in their fridge. Features include parsing receipt, searching food by keywords and sending notifications when food is near expiry.
 
